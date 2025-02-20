@@ -7,11 +7,19 @@ from bson import ObjectId
 
 app = FastAPI()
 
+from marketplace import app  # Import aplikacji z pliku marketplace.py
+
+
+
 # 🔹 Pobranie Connection String do Cosmos DB (MongoDB API) i Azure Blob Storage
 COSMOS_DB_URL = os.getenv("COSMOS_DB_URL")  # Używamy poprawnego connection stringa dla MongoDB API
 AZURE_BLOB_CONNECTION_STRING = os.getenv("AZURE_BLOB_STORAGE_CONNECTION_STRING")
 AZURE_STORAGE_ACCOUNT_NAME = os.getenv("AZURE_STORAGE_ACCOUNT_NAME")  
 CONTAINER_NAME = "product-images"
+
+
+SECRET_KEY = os.getenv("SECRET_KEY", "53206fb0ab54cb88d6f34be379353f09fd9906ffe2b5c92e4aea34998ae46524")
+
 
 # 🔹 Połączenie z Cosmos DB (MongoDB API)
 try:
@@ -32,7 +40,7 @@ except Exception as e:
 # 🔹 Obsługa CORS dla frontendu
 origins = [
     "https://orange-ocean-095b25503.4.azurestaticapps.net",
-    "https://my-backend-fastapi.azurewebsites.net"
+    "https://new-backend-fastapi.azurewebsites.net"
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -100,6 +108,3 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
-@app.get("/health")
-async def health_check():
-    return {"status": "ok"}
